@@ -173,6 +173,10 @@ async function requestText(url, options = {}) {
 }
 
 function loadProtoTypes(liqiJson) {
+  liqiJson.nested.lq.nested.ReqRequestConnection.fields.platform ??= {
+    type: 'string',
+    id: 6
+  };
   const root = protobuf.Root.fromJSON(liqiJson);
   return Object.fromEntries(
     Object.entries(PROTO_TYPES).map(([key, typeName]) => [key, root.lookupType(typeName)])
@@ -390,7 +394,8 @@ async function createSessionForRoute(context, route, credentials) {
     {
       type: 1,
       route_id: route.id,
-      timestamp: Date.now()
+      timestamp: Date.now(),
+      platform: 'Web'
     },
     proto.ResRequestConnection
   );
